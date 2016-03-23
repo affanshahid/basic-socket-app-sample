@@ -9,8 +9,18 @@ var io = socketio(server);
 
 app.use(express.static('./public'));
 
-io.on('connection', function() {
+io.on('connection', function(socket) {
     console.log('User connected via socket.io');
+
+    socket.on('message', function(message) {
+        console.log('Message recieved: ' + message.text);
+
+        socket.broadcast.emit('message', message);
+    });
+
+    socket.emit('message', {
+        text: 'Welcome to the chat app!'
+    });
 });
 
 server.listen(PORT, function() {
