@@ -1,0 +1,29 @@
+{
+    "env": {
+        "node": true,
+        "browser": true,
+        "jquery": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "indent": [
+            "warn",
+            4,
+            {"SwitchCase": 1}
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "semi": [
+            "warn",
+            "always"
+        ],
+        "no-console": [
+            "off"
+        ]  
+    }
+}
