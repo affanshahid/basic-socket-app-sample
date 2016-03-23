@@ -9,6 +9,8 @@ $(function() {
     socket.on('message', function(message) {
         console.log('New message:');
         console.log(message.text);
+
+        $('.messages').append('<p>' + message.text + '</p>');
     });
 
     //Handles submitting of messages
