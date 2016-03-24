@@ -5,8 +5,14 @@ $(function() {
     var name = getQueryParam('name') || 'Anonymous';
     var room = getQueryParam('room');
 
+    $('h1.room-name').text(room);
+
     socket.on('connect', function() {
         console.log('Connected to socket.io server');
+        socket.emit('join-room', {
+            name: name,
+            room: room
+        });
     });
 
     socket.on('message', function(message) {
@@ -28,8 +34,7 @@ $(function() {
         var $messageField = $form.find('input[name="message"]');
 
         socket.emit('message', {
-            text: $messageField.val(),
-            name: name
+            text: $messageField.val()
         });
 
         $messageField.val('').focus();
@@ -41,8 +46,10 @@ function getQueryParam(name) {
     var vars = query.substring(1).split('&');
     for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split('=');
-        if (pair[0] === name)
-            return decodeURIComponent(pair[1]);
+        if (pair[0] === name) {
+            var data = pair[1].replace(/\+/g, ' ');
+            return decodeURIComponent(data);
+        }
     }
     return undefined;
 }

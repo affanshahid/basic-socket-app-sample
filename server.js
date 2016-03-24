@@ -12,11 +12,25 @@ app.use(express.static('./public'));
 
 io.on('connection', function(socket) {
     console.log('User connected via socket.io');
+    
+    var clientInfo;
+
+    socket.on('join-room', function(request) {
+        clientInfo = request;
+
+        socket.join(clientInfo.room);
+        socket.broadcast.to(clientInfo.room).emit('message', {
+            name: 'System',
+            text: clientInfo.name + ' has joined!',
+            timestamp: moment().valueOf()
+        });
+    });
 
     socket.on('message', function(message) {
         console.log('Message recieved: ' + message.text);
         message.timestamp = moment.now().valueOf();
-        io.emit('message', message);
+        message.name = clientInfo.name;
+        io.to(clientInfo.room).emit('message', message);
     });
 
     socket.emit('message', {
