@@ -1,4 +1,4 @@
-/*globals io*/
+/*globals io, moment*/
 $(function() {
     var socket = io();
 
@@ -7,10 +7,12 @@ $(function() {
     });
 
     socket.on('message', function(message) {
+        var formattedTimestamp = moment.utc(message.timestamp).local().format('h:mm a: ');
+
         console.log('New message:');
         console.log(message.text);
 
-        $('.messages').append('<p>' + message.text + '</p>');
+        $('.messages').append('<p><strong>' + formattedTimestamp + '</strong>' + message.text + '</p>');
     });
 
     //Handles submitting of messages
